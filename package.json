@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon .",
-    "publish": "git add --all && git commit -m \"In Progress\" && git push"  },
+    "publish": "git add --all && git commit -m \"tomorrow\" && git push"  },
   "author": "Anas Maher",
   "license": "ISC",
   "dependencies": {

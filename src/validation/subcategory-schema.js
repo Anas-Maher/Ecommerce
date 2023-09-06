@@ -2,7 +2,7 @@ import Joi from "joi";
 import { Types } from "mongoose";
 const IsValidObjectId = (v, h) => {
     return !Types.ObjectId.isValid(v)
-        ? h.message("creator must be of type Object Id")
+        ? h.message("param must be of type Object Id")
         : true;
 };
 export const create_subcategory_schema = {

@@ -1,5 +1,6 @@
 import { Schema, Types, model } from "mongoose";
 import Format from "../../utils/SearchFormatter.js";
+import subcategory_model from "./subcategory-model.js";
 
 export const category_schema = new Schema(
     {
@@ -45,7 +46,6 @@ category_schema.virtual('subs', {
     localField: "_id",
     foreignField: "parent-category",
 });
-
 
 const category_model = model("category", category_schema);
 

@@ -1,4 +1,5 @@
 import category_model from "../db/models/category-model.js";
+import subcategory_model from "../db/models/subcategory-model.js";
 import AsyncErrorHandler from "../utils/AsyncErrorHandler.js";
 import { folder_name } from "../utils/Envs.js";
 import NextError from "../utils/NextError.js";
@@ -10,7 +11,7 @@ export const create_category = AsyncErrorHandler(async (req, res, next) => {
     const { name } = req.body;
     const { _id: creator } = req?.user;
     if (!req.file) return CallNext("Category Photo Is Required", 400);
-    const path = req?.file?.path; // C:\\Users\\Anas\\AppData\\Local\\Temp\\e4e8d2b2f88fe86c39e5ef10f4c54898
+    const path = req?.file?.path; //
     const { secure_url, public_id } = await cloud.uploader.upload(path, {
         folder: `${folder_name}/category`,
     });
@@ -35,6 +36,9 @@ export const update_category = AsyncErrorHandler(async (req, res, next) => {
     if (!category) {
         return CallNext("category not found", 401);
     }
+    if (category._id.toString() !== req?.user?._id.toString()) {
+        return CallNext("you are not authorized", 403);
+    }
     name ||= category["display-name"];
     await category.updateOne({
         "display-name": name,
@@ -54,6 +58,9 @@ export const delete_category = AsyncErrorHandler(async (req, res, next) => {
     const { CallNext } = NextError(next);
     const { id } = req.params;
     const { uuid } = req.body;
+    if (category._id.toString() !== req?.user?._id.toString()) {
+        return CallNext("you are not authorized ", 403);
+    }
     //Todo Delete All The category products
     const category = await category_model.findById(id);
     if (!category) return CallNext("Category Not found", 400);
@@ -65,6 +72,9 @@ export const delete_category = AsyncErrorHandler(async (req, res, next) => {
 export const all_catagories = AsyncErrorHandler(async (_req, res, _next) => {
     const all = await category_model
         .find()
-        .populate([{ path: "subs", populate: [{ path: "creator" }] }, {path :'creator'}]);
+        .populate([
+            { path: "subs", populate: [{ path: "creator" }] },
+            { path: "creator" },
+        ]);
     return res.json({ done: true, payload: all });
 });

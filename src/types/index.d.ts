@@ -7,51 +7,18 @@ import { users_schema } from "../db/models/users-models.js";
 import { category_schema } from "../db/models/category-model.js";
 global {
     export declare namespace Express {
-        /**
-         * This is a built-in middleware function in Express. It parses incoming requests with JSON payloads and is based on body-parser.
-         * @since 4.16.0
-         */
         var json: typeof bodyParser.json;
-
-        /**
-         * This is a built-in middleware function in Express. It parses incoming requests with Buffer payloads and is based on body-parser.
-         * @since 4.17.0
-         */
         var raw: typeof bodyParser.raw;
-
-        /**
-         * This is a built-in middleware function in Express. It parses incoming requests with text payloads and is based on body-parser.
-         * @since 4.17.0
-         */
         var text: typeof bodyParser.text;
-
-        /**
-         * These are the exposed prototypes.
-         */
         var application: Application;
         var request: Request;
         var response: Response;
-
-        /**
-         * This is a built-in middleware function in Express. It serves static files and is based on serve-static.
-         */
         var static: serveStatic.RequestHandlerConstructor<Response>;
-
-        /**
-         * This is a built-in middleware function in Express. It parses incoming requests with urlencoded payloads and is based on body-parser.
-         * @since 4.16.0
-         */
         var urlencoded: typeof bodyParser.urlencoded;
-
-        /**
-         * This is a built-in middleware function in Express. It parses incoming request query parameters.
-         */
         export function query(
             options: qs.IParseOptions | typeof qs.parse
         ): Handler;
-
         export function Router(options?: RouterOptions): core.Router;
-
         interface RouterOptions {
             /**
              * Enable case sensitivity.
@@ -153,7 +120,9 @@ global {
 declare function Express(): core.Express;
 
 export type Fn<T = unknown> = (
-    req: Request & { user: user_shape & { _id: Types.ObjectId } } & {file? : File},
+    req: Request & { user: user_shape & { _id: Types.ObjectId } } & {
+        file?: File;
+    } & { files?: File[] },
     res: Response,
     next: NextFunction
 ) => Promise<T>;

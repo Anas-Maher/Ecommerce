@@ -4,6 +4,9 @@ import GlobalErrorHandler from "./utils/GlobalErrorHandler.js";
 import users_router from "./routes/users-router.js";
 import categories_router from "./routes/categories-router.js";
 import subcategory_router from "./routes/subcategory-router.js";
+import brands_router from "./routes/brand-router.js";
+import products_router from "./routes/product-router.js";
+import coupons_router from "./routes/coupon-router.js";
 /**
  *
  * @param {import('express').Express} app
@@ -17,6 +20,9 @@ const Start = async (app, express) => {
         app.use("/users", users_router);
         app.use("/category", categories_router);
         app.use("/subcategory", subcategory_router);
+        app.use("/brands", brands_router);
+        app.use("/products", products_router);
+        app.use("/coupons", coupons_router);
         app.use("*", (_, s) => s.json("Check Url And Method please "));
         app.use(GlobalErrorHandler);
     } catch (error) {

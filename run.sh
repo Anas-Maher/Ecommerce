@@ -10,4 +10,4 @@ touch $file'-router.js' || exit
 cd "../validation" || exit
 touch $file'-schema.js' || exit
 cd "../../" || exit
-pwd
+exit

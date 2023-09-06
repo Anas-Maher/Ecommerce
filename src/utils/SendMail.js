@@ -6,13 +6,11 @@ import { email, password } from "./Envs.js";
  */
 /**
  *
- * @param {import("ts").Mail} param0
+ * @param {import("../types").Mail_Things.Mail} param0
  * @returns {Promise<boolean>}
  */
 const SendMail = async ({ to, html, subject } = {}) => {
-    const from = `Keep Your Passes <passwords-app-v1@gmail.com>`;
-    to ||= [];
-    html ||= "";
+    const from = `Ecommerce <ecommerce-app@gmail.com>`;
     subject ||= "Confirm Email";
     const Service = mailer.createTransport({
         service: "gmail",

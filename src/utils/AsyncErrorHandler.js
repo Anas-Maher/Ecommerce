@@ -1,8 +1,8 @@
 /**
  *
- * @param {import('ts').Fn} fn
- * @param {number} status http status code  
- * @returns {import('ts').Error_Handler}
+ * @param {import('../types').Fn} fn
+ * @param {number} status http status code
+ * @returns {import('../types').Error_Handler}
  */
 const AsyncErrorHandler = (fn, status = 400) => {
     /** */

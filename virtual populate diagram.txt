@@ -1,0 +1,12 @@
+virtual populate diagram
+
+Category >> [sub , products]
+
+
+subs >> [brand , products]
+
+
+pros >> [category , brand]
+
+
+brand >> [category , pros]

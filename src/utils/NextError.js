@@ -1,7 +1,7 @@
 /**
  *
  * @param {import("express").NextFunction} next
- * @returns {import("ts").Call_Next}
+ * @returns {import("../types").Call_Next}
  */
 const NextError = (next) => {
     /**
@@ -17,16 +17,9 @@ const NextError = (next) => {
          */
         CallNext(msg, cause = 500) {
             return next(
-                new Error(
-                    typeof msg === "string"
-                        ? msg
-                        : typeof msg === "number"
-                        ? msg?.toString()
-                        : JSON.stringify(msg),
-                    {
-                        cause,
-                    }
-                )
+                new Error(typeof msg === "string" ? msg : msg?.toString(), {
+                    cause,
+                })
             );
         },
     };

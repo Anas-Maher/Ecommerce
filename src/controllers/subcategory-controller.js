@@ -46,7 +46,7 @@ export const update_subcategory = AsyncErrorHandler(async (req, res, next) => {
     if (!subcategory) {
         return CallNext("subcategory not found", 404);
     }
-    if (subcategory._id.toString() !== req?.user?._id.toString()) {
+    if (subcategory.creator.toString() !== req?.user?._id.toString()) {
         return CallNext("you are not authorized", 403);
     }
     if (req.file) {
@@ -86,7 +86,7 @@ export const delete_subcategory = AsyncErrorHandler(async (req, res, next) => {
     const { id } = req.params;
     const subcategory = await subcategory_model.findById(id);
     if (!subcategory) return CallNext("subcategory not found", 404);
-    if (subcategory._id.toString() !== req?.user?._id.toString()) {
+    if (subcategory.creator.toString() !== req?.user?._id.toString()) {
         return CallNext("you are not authorized", 403);
     }
     await cloud.uploader.destroy(subcategory.image["public-id"]);

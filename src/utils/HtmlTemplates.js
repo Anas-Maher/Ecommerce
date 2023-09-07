@@ -21,43 +21,71 @@ export const Generate_Html = (...urls) => {
  * @returns {string} Html template
  */
 export const confirm_email_template = (link) => `
-<!DOCTYPE html>
-<html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <title>Confirm Email</title>
-    </head>
-    <body>
-        <style>
+    <!DOCTYPE html>
+    <html>
+        <head>
+            <title>Email Confirmation</title>
+        </head>
+        <style type="text/css">
             body {
-                display: flex;
-                justify-content: center;
-                align-items: center;
-                flex-direction: column;
-            }
-            a {
-                all: unset;
-                text-decoration: none;
-                text-transform: capitalize;
-                font-size: 1.4rem;
-                background-color: blue;
-                color: white;
-                padding: 0.5rem;
-                border-radius: 1rem;
-                cursor: pointer;
-                position: absolute;
-                left: 50%;
-                top: 50%;
-                transform: translate(-50%, -50%);
-            }
-            h3 {
-                text-transform: capitalize;
+                background-color: #88bdbf;
+                margin: 0px;
             }
         </style>
-        <a href="${link}">Confirm Email</a>
-        <h3>Please Go To This url is The link above doesn't work: </h3>
-        <h4>${link} </h4>
-    </body>
-</html>
+        <body style="margin: 0px">
+            <table
+                border="0"
+                width="50%"
+                style="
+                    margin: auto;
+                    padding: 30px;
+                    background-color: #f3f3f3;
+                    border: 1px solid #630e2b;
+                    border-radius: 2rem;
+                ">
+                <tr>
+                    <td>
+                        <table
+                            border="0"
+                            cellpadding="0"
+                            cellspacing="0"
+                            style="
+                                text-align: center;
+                                width: 100%;
+                                padding: 2rem 2rem 3rem ;
+                                display: flex;
+                                justify-content: center;
+                                align-items: center;
+                                background-color: #fff;
+                            ">
+                            <tr>
+                                <td>
+                                    <h1 style="padding-top: 25px; color: #630e2b">
+                                        Email Confirmation
+                                    </h1>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <a
+                                        href="${link}"
+                                        style="
+                                            margin: 10px 0px 30px 0px;
+                                            border-radius: .75rem;
+                                            padding: 10px 20px;
+                                            border: 0;
+                                            color: #fff;
+                                            text-decoration: none;
+                                            background-color: #630e2b;
+                                        "
+                                        >Verify Email address</a
+                                    >
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </table>
+        </body>
+    </html>
 `;

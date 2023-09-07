@@ -42,8 +42,8 @@ export const update_brand = AsyncErrorHandler(async (req, res, next) => {
     if (!brand) {
         return CallNext("brand not found", 401);
     }
-    if (brand._id.toString() !== req?.user?._id.toString()) {
-        return CallNext("you are not authorized", 403);
+    if (brand.creator.toString() !== req?.user?._id.toString()) {
+        return CallNext("you can'r delete this brand", 401);
     }
     name ||= brand["display-name"];
     await brand.updateOne({
@@ -63,11 +63,10 @@ export const update_brand = AsyncErrorHandler(async (req, res, next) => {
 export const delete_brand = AsyncErrorHandler(async (req, res, next) => {
     const { CallNext } = NextError(next);
     const { id } = req.params;
-    const { uuid } = req.body;
     //Todo Delete All The brand products
     const brand = await brand_model.findById(id);
     if (!brand) return CallNext("Brand Not found", 400);
-    if (brand._id.toString() !== req?.user?._id.toString()) {
+    if (brand.creator.toString() !== req?.user?._id.toString()) {
         return CallNext("you are not authorized", 403);
     }
     await cloud.uploader.destroy(brand.image["public-id"]);

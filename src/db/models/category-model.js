@@ -39,9 +39,9 @@ export const category_schema = new Schema(
     }
 );
 category_schema.pre("save", function () {
-    this["search-name"] = Format(this["display-name"] + "@yea");
+    this["search-name"] = Format(this["display-name"]);
 });
-category_schema.virtual('subs', {
+category_schema.virtual("subs", {
     ref: "subcategory",
     localField: "_id",
     foreignField: "parent-category",

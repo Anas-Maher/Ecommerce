@@ -5,6 +5,8 @@ import "dotenv/config";
 import * as bodyParser from "body-parser";
 import { users_schema } from "../db/models/users-models.js";
 import { category_schema } from "../db/models/category-model.js";
+import { order_schema } from "../db/models/order-model.js";
+import { products_schema } from "../db/models/product-model.js";
 global {
     export declare namespace Express {
         var json: typeof bodyParser.json;
@@ -148,17 +150,29 @@ export type Json_Response = {
 
 export type Mail = {
     to: string | string[];
-    html: string;
+    html?: string;
+    text?: string;
     subject?: string;
+    attachments: Array<{ path: string; contentType: string }>;
 };
 
 export type token_shape = {
     readonly email: string;
 } | null;
 export type user_shape = InferSchemaType<typeof users_schema>;
+export type order_shape = InferSchemaType<typeof order_schema>;
 export type category_shape = InferSchemaType<typeof category_schema>;
 export type users_role = "buyer" | "seller";
 
 export type DeepReadonly<T> = {
     readonly [P in keyof T]: DeepReadonly<T[P]>;
 };
+
+export type Shipping =
+    | "placed"
+    | "shipping"
+    | "delivered"
+    | "canceled"
+    | "refund";
+export type Payment = "card" | "cash";
+export type Pros = Array<typeof products_schema & InferSchemaType<typeof products_schema>>;

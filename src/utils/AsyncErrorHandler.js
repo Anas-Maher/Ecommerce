@@ -18,8 +18,10 @@ const AsyncErrorHandler = (fn, status = 400) => {
              */
             (error) => {
                 return res?.status(status)?.json({
-                    error: error?.message ?? "Internal Server Error",
-                    stack: error?.stack,
+                    error:
+                        error?.message?.replaceAll(/\n?('|")/g, "") ??
+                        "Internal Server Error",
+                    stack: error?.stack?.replaceAll(/\n?('|")/g, ""),
                 });
             }
         );

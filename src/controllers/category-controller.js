@@ -31,15 +31,15 @@ export const create_category = AsyncErrorHandler(async (req, res, next) => {
 export const update_category = AsyncErrorHandler(async (req, res, next) => {
     const { CallNext } = NextError(next);
     const { id } = req.params;
-    let { name } = req.body;
+    const { name: _name } = req.body;
     const category = await category_model.findById(id);
     if (!category) {
         return CallNext("category not found", 401);
     }
-    if (category._id.toString() !== req?.user?._id.toString()) {
-        return CallNext("you are not authorized", 403);
+    if (category.creator.toString() !== req?.user?._id.toString()) {
+        return CallNext("you can't delete this category", 403);
     }
-    name ||= category["display-name"];
+    const name = _name?.trim() || category["display-name"];
     await category.updateOne({
         "display-name": name,
         "search-name": Format(name),
@@ -57,13 +57,12 @@ export const update_category = AsyncErrorHandler(async (req, res, next) => {
 export const delete_category = AsyncErrorHandler(async (req, res, next) => {
     const { CallNext } = NextError(next);
     const { id } = req.params;
-    const { uuid } = req.body;
-    if (category._id.toString() !== req?.user?._id.toString()) {
-        return CallNext("you are not authorized ", 403);
-    }
-    //Todo Delete All The category products
     const category = await category_model.findById(id);
     if (!category) return CallNext("Category Not found", 400);
+    if (category.creator.toString() !== req?.user?._id.toString()) {
+        return CallNext("you can't delete this category", 401);
+    }
+    //Todo Delete All The category products
     await cloud.uploader.destroy(category.image["public-id"]);
     await category_model.findByIdAndDelete(id);
     return res.json({ done: true, payload: "deleted successfully" });

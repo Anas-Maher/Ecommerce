@@ -5,12 +5,13 @@ import SendMail from "../utils/SendMail.js";
 import NextError from "../utils/NextError.js";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { Expiration_Time, jwt_signature } from "../utils/Envs.js";
+import { Expiration_Time, jwt_signature, rounds } from "../utils/Envs.js";
 import token_model from "../db/models/token-model.js";
 import {
     Generate_Html,
     confirm_email_template,
 } from "../utils/HtmlTemplates.js";
+import cart_model from "../db/models/cart-model.js";
 export const signup = AsyncErrorHandler(
     /**/ async (req, res, next) => {
         const { CallNext } = NextError(next);
@@ -20,6 +21,7 @@ export const signup = AsyncErrorHandler(
             email,
             gender,
             phone,
+            role,
         } = req.body;
         const is_user = await users_model.findOne({ email });
         if (is_user) {
@@ -37,7 +39,9 @@ export const signup = AsyncErrorHandler(
             gender,
             "activation-code": code,
             phone,
+            role: role || "buyer",
         });
+        // await cart_model.create({user : user._id , products : {"product-id" : }})
         const html = confirm_email_template(
             `${req.protocol}://${req.headers.host}/users/confirm-email/${code}`
         );
@@ -71,6 +75,7 @@ export const confirm_email = AsyncErrorHandler(async (req, res, next) => {
         // todo redirect to frontend
         return CallNext("User not found please try to register", 404);
     }
+    await cart_model.create({ user: user._id });
     /**
      * @type {import("./types/index.js").Json_Response}
      */
@@ -91,7 +96,7 @@ export const login = AsyncErrorHandler(async (req, res, next) => {
     const token = jwt.sign({ email: _email }, jwt_signature, {
         expiresIn: Expiration_Time,
     });
-    const agent = req.headers?.agent
+    const agent = req.headers?.agent;
     await token_model.create({ agent, token, user: user._id });
     await user.updateOne({ $set: { status: "online" } }, { new: true });
     const res1 = { payload: token, done: true };
@@ -106,14 +111,14 @@ export const forget_password = AsyncErrorHandler(async (req, res, next) => {
     }
     const code = `${Math.trunc(Math.random() * 10 ** 8)}`;
     await user.updateOne({ $set: { "forget-code": code } }, { new: true });
-    const url = `${req.protocol}://${req.headers.host}/users/reset-password/${code}`;
+    const url = `https://`;
     const html = Generate_Html({
         url,
-        msg: "Reset Password",
+        msg: `Confirmation Code is ${code}`,
     });
     // Todo redirect to frontend
     const sent = await SendMail({
-        subject: "reset password",
+        subject: "Reset Password",
         to: user.email,
         html,
     });
@@ -129,18 +134,20 @@ export const forget_password = AsyncErrorHandler(async (req, res, next) => {
 export const reset_password = AsyncErrorHandler(async (req, res, next) => {
     const { email, password, code } = req.body;
     const { CallNext } = NextError(next);
-    const is_user = await users_model.findOne({ "forget-code": code });
+    const is_user = await users_model.findOne({ email, "forget-code": code });
     if (!is_user || !is_user["is-confirmed"]) {
-        return CallNext("invalid code", 404);
+        return CallNext("invalid code", 401);
     }
     const user = await users_model.findOneAndUpdate(
         { email },
         { $unset: { "forget-code": 1 } },
         { new: true }
     );
-    (await token_model.find({ user: user._id })).forEach((token) =>
-        token.updateOne({ $set: { "is-valid": false } })
-    );
+    const tokens = await token_model.find({ user: user._id });
+    tokens.forEach((token) => token.updateOne({ $set: { "is-valid": false } }));
+    await is_user.updateOne({
+        $set: { password: bcrypt.hashSync(password, rounds) },
+    });
     const res1 = { done: true, payload: "try to login again" };
     return res.json(res1);
 });

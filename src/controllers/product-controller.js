@@ -54,9 +54,7 @@ export const add_product = AsyncErrorHandler(async (req, res, next) => {
         slug: Format(name),
         description,
     });
-    return res
-        .status(201)
-        .json({ done: true, payload: { ...product, unique_name } });
+    return res.status(201).json({ done: true, payload: product });
 });
 
 export const delete_product = AsyncErrorHandler(async (req, res, next) => {
@@ -85,14 +83,11 @@ export const all_products = AsyncErrorHandler(async (_req, res, _next) => {
 });
 export const search_products = AsyncErrorHandler(async (req, res, next) => {
     const { CallNext } = NextError(next);
-    let { page, limit, fields, sort } = req.query;
+    let { fields, sort } = req.query;
     const product = await products_model
-        .find({
-            // ...req.query,
-        })
-        // .paginate(page , limit)
-        ?.custom_select(fields);
-    // .sort(sort);
+        .find({})
+        ?.custom_select(fields)
+        ?.sort(sort);
     return res.json({ done: true, payload: product });
 });
 
@@ -100,6 +95,9 @@ export const single_product = AsyncErrorHandler(async (req, res, next) => {
     const { CallNext } = NextError(next);
     const { id } = req.params;
     const product = await products_model.findById(id);
+    if (!product) {
+        return CallNext('product not found ' , 404)
+    }
     return res.json({ done: true, payload: product });
 });
 

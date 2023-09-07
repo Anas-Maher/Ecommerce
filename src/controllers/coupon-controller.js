@@ -6,7 +6,7 @@ import { randomBytes } from "crypto";
 export const create_coupon = AsyncErrorHandler(async (req, res, next) => {
     const { CallNext } = NextError(next);
     const { discount, expires_at } = req.body;
-    const name = randomBytes(16).toString("hex");
+    const name = randomBytes(6).toString("hex");
     const coupon = await coupon_model.create({
         "discount-percentage": discount,
         creator: req.user._id,

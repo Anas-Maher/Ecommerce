@@ -1,10 +1,6 @@
 import Joi from "joi";
 import { Types } from "mongoose";
-const IsValidObjectId = (v, h) => {
-    return !Types.ObjectId.isValid(v)
-        ? h.message("parameter must be of type Object Id")
-        : true;
-};
+
 export const create_coupon_schema = {
     body: Joi.object({
         discount: Joi.number().min(1).max(100).required(),

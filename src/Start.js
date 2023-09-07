@@ -7,6 +7,8 @@ import subcategory_router from "./routes/subcategory-router.js";
 import brands_router from "./routes/brand-router.js";
 import products_router from "./routes/product-router.js";
 import coupons_router from "./routes/coupon-router.js";
+import cart_router from "./routes/cart-router.js";
+import order_router from "./routes/order-router.js";
 /**
  *
  * @param {import('express').Express} app
@@ -23,6 +25,8 @@ const Start = async (app, express) => {
         app.use("/brands", brands_router);
         app.use("/products", products_router);
         app.use("/coupons", coupons_router);
+        app.use("/cart", cart_router);
+        app.use("/order", order_router);
         app.use("*", (_, s) => s.json("Check Url And Method please "));
         app.use(GlobalErrorHandler);
     } catch (error) {

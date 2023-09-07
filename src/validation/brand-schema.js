@@ -1,11 +1,6 @@
 import Joi from "joi";
 import { Types } from "mongoose";
-const IsValidObjectId = (v, h) => {
-    return !Types.ObjectId.isValid(v)
-        ? h.message("param must be of type Object Id")
-        : true;
-};
-
+import IsValidObjectId from "../utils/Is_valid_object_Id.js";
 export const create_brand_schema = {
     body: Joi.object({
         name: Joi.string().required(),

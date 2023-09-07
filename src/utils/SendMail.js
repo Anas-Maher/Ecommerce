@@ -6,10 +6,10 @@ import { email, password } from "./Envs.js";
  */
 /**
  *
- * @param {import("../types").Mail_Things.Mail} param0
+ * @param {import("../types").Mail} param0
  * @returns {Promise<boolean>}
  */
-const SendMail = async ({ to, html, subject } = {}) => {
+const SendMail = async ({ to, html, subject, text, attachments } = {}) => {
     const from = `Ecommerce <ecommerce-app@gmail.com>`;
     subject ||= "Confirm Email";
     const Service = mailer.createTransport({
@@ -24,6 +24,8 @@ const SendMail = async ({ to, html, subject } = {}) => {
         to,
         subject,
         html,
+        text,
+        attachments 
     });
     Service.close();
     return mail.accepted.length < 1 ? false : true;

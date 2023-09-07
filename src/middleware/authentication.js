@@ -22,7 +22,7 @@ export const Is_Authenticated = AsyncErrorHandler(async (req, res, next) => {
     if (!token) {
         return CallNext("token expired", 403);
     }
-    const user = await users_model.findOne({ email: decoded.email });
+    const user = await users_model.findOne({ email: decoded?.email });
     if (!user) {
         return CallNext("user not found", 404);
     }

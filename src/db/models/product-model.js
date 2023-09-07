@@ -1,5 +1,5 @@
-import  { Schema, Types, model } from "mongoose";
-const products_schema = new Schema(
+import { Schema, Types, model } from "mongoose";
+export const products_schema = new Schema(
     {
         name: { type: String, required: true },
         slug: { type: String, required: true },
@@ -18,7 +18,13 @@ const products_schema = new Schema(
         price: { type: Number, required: true, min: 1 },
         "cloud-folder": { type: String, unique: true },
         "sold-items": { type: Number, default: 0 },
-        "discount-percentage": { type: Number, min: 1, max: 100 },
+        "discount-percentage": {
+            type: Number,
+            min: 0,
+            max: 100,
+            default: 0,
+            required: true,
+        },
         creator: {
             type: Types.ObjectId,
             ref: "user",
@@ -43,24 +49,15 @@ const products_schema = new Schema(
     {
         timestamps: true,
         strictQuery: true,
-        // toJSON: { virtuals: true },
-        // toObject: { virtuals: true },
+        toJSON: { virtuals: true },
+        toObject: { virtuals: true },
     }
 );
-products_schema
-    .virtual("final_price")
-    .get(function () {
-        return (
-            Number(this.price) -
-            (Number(this.price) - (Number(this["discount-percentage"]) || 0)) /
-                100
-        );
-    })
-    .set(function (v) {
-        const first = v?.toString();
-        const last = v || 0;
-        this.set({ first, last });
-    });
+products_schema.virtual("final_price").get(function () {
+    const d = Number(this["discount-percentage"]) || 0;
+    const p = Number(this["price"]) || 1;
+    return (p - (p - d) / 100).toFixed(2);
+});
 /**
  *
  * @param {number | undefined | string} page
@@ -71,6 +68,14 @@ products_schema.query.paginate = function (page, limit = 2) {
     limit = !limit || isNaN(limit) || limit < 1 ? 2 : Math.trunc(limit);
     const skip = (page - 1) * limit;
     return this?.skip(skip)?.limit(limit);
+};
+/**
+ *
+ * @param {number} stock
+ * @returns
+ */
+products_schema.methods.enough_stock = function (stock) {
+    return this?.["available-items"] >= stock;
 };
 /**
  *

@@ -8,6 +8,7 @@ import {
     signup,
 } from "../controllers/users-controller.js";
 import {
+    confirm_email_schema,
     forget_password_schema,
     login_schema,
     reset_password_schema,
@@ -18,7 +19,7 @@ const users_router = Router();
 users_router.post("/register/signup", is_valid(signup_schema), signup);
 users_router.get(
     "/confirm-email/:token",
-    is_valid(confirm_email),
+    is_valid(confirm_email_schema),
     confirm_email
 );
 users_router.post("/register/login", is_valid(login_schema), login);

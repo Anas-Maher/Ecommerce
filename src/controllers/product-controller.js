@@ -67,9 +67,9 @@ export const delete_product = AsyncErrorHandler(async (req, res, next) => {
     if (req.user._id.toString() !== product.creator.toString()) {
         return CallNext("you are not authorized", 403);
     }
-    // const ids = product.images.map(({public_id}) => public_id)
-    // ids.push(product["default-image"].public_id)
-    // await cloud.api.delete_resources(ids)
+    const ids = product.images.map(({ public_id }) => public_id);
+    ids.push(product["default-image"].public_id);
+    await cloud.api.delete_resources(ids);
     await cloud.api.delete_folder(
         `${folder_name}/products/${product["cloud-folder"]}`
     );
@@ -96,7 +96,7 @@ export const single_product = AsyncErrorHandler(async (req, res, next) => {
     const { id } = req.params;
     const product = await products_model.findById(id);
     if (!product) {
-        return CallNext('product not found ' , 404)
+        return CallNext("product not found ", 404);
     }
     return res.json({ done: true, payload: product });
 });

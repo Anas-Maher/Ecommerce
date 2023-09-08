@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "nodemon .",
-    "publish": "git add --all && git commit -m \"Last Fixes\" && git push"
+    "start": "node ./index.js",
+    "publish": "git add --all && git commit -m \"Last Fixes && deploying\" && git push"
   },
   "author": "Anas Maher",
   "license": "ISC",
@@ -31,5 +32,8 @@
     "@types/node": "^20.5.8",
     "nodemon": "^3.0.1",
     "typescript": "^5.2.2"
+  },
+  "engines": {
+    "node": "18.17.0"
   }
 }

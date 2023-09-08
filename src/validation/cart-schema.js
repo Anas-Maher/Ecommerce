@@ -1,7 +1,7 @@
 import joi from "joi";
 import IsValidObjectId from "../utils/Is_valid_object_Id.js";
 
-export const add2cart_schema = {
+export const Add_To_Cart_schema = {
     body: joi.object({
         product_id: joi.string().custom(IsValidObjectId).required(),
         quantity: joi.number().integer().min(1).max(250).required(),

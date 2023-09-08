@@ -104,8 +104,7 @@ export const create_order = AsyncErrorHandler(async (req, res, next) => {
             "sorry we could not send an email but your order has been place please call the support or cancel the order"
         );
     }
-    update_stock(order?.products);
-    clear_cart(req?.user?._id);
+    await update_stock(order?.products);
     if (payment === "card") {
         const stripe = new Stripe(stripe_key);
         if (order?.coupon?.name != undefined) {
@@ -123,7 +122,7 @@ export const create_order = AsyncErrorHandler(async (req, res, next) => {
             line_items: order_products.map((product) => {
                 return {
                     price_data: {
-                        currency: "egp",
+                        currency: "usd",
                         product_data: {
                             name: product.name,
                         },
@@ -136,6 +135,7 @@ export const create_order = AsyncErrorHandler(async (req, res, next) => {
         });
         return res.json({ done: true, payload: stripe_session.url });
     }
+    await clear_cart(req?.user?._id);
     return res.json({ done: true, payload: "check your inbox please" });
 });
 

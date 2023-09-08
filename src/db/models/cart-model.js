@@ -28,5 +28,6 @@ const cart_schema = new Schema(
         // toObject: { virtuals: true },
     }
 );
+
 const cart_model = model("cart", cart_schema);
 export default cart_model;

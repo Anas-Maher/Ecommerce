@@ -3,19 +3,24 @@ import { Is_Authenticated } from "../middleware/authentication.js";
 import { Is_Authorized } from "../middleware/authorization.js";
 import is_valid from "../middleware/validator.js";
 import {
-    add2cart_schema,
+    Add_To_Cart_schema,
     remove_product_cart_schema,
     update_cart_schema,
 } from "../validation/cart-schema.js";
 import {
-    add2cart,
+    Add_To_Cart,
     user_cart,
     update_cart,
     remove_product_from_cart,
     remove_cart,
 } from "../controllers/cart-controller.js";
 const cart_router = Router();
-cart_router.post("/add", Is_Authenticated, is_valid(add2cart_schema), add2cart);
+cart_router.post(
+    "/add",
+    Is_Authenticated,
+    is_valid(Add_To_Cart_schema),
+    Add_To_Cart
+);
 cart_router.get("/", Is_Authenticated, user_cart);
 cart_router.patch(
     "/",

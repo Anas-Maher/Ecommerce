@@ -38,5 +38,9 @@ products_router.delete(
 products_router.get("/all", all_products);
 products_router.get("/search", search_products);
 products_router.get("/single/:id", is_valid(productId_schema), single_product);
-products_router.get("/category/:id", is_valid(productId_schema), category_product);
+products_router.get(
+    "/of-category/:id",
+    is_valid(productId_schema),
+    category_product
+);
 export default products_router;

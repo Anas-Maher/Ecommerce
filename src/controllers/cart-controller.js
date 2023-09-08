@@ -3,7 +3,7 @@ import products_model from "../db/models/product-model.js";
 import AsyncErrorHandler from "../utils/AsyncErrorHandler.js";
 import NextError from "../utils/NextError.js";
 
-export const add2cart = AsyncErrorHandler(async (req, res, next) => {
+export const Add_To_Cart = AsyncErrorHandler(async (req, res, next) => {
     const { CallNext } = NextError(next);
     const { product_id, quantity } = req.body;
     const product = await products_model.findById(product_id);
@@ -62,7 +62,7 @@ export const update_cart = AsyncErrorHandler(async (req, res, next) => {
         return CallNext("cart not found!", 404);
     }
     if (cart) {
-        // Todo Use Spread Operator And GEt The Whole Quantity 
+        // Todo Use Spread Operator And GEt The Whole Quantity
         // Complete Stripe , Fix Invoice , WebSockets?
         for (let i = 0; i < cart.products.length; i++) {
             const first_product = cart.products[i];
@@ -116,7 +116,7 @@ export const remove_cart = AsyncErrorHandler(async (req, res, next) => {
         { new: true }
     );
     if (!cart) {
-        return CallNext("cart not found!", 404);
+        return CallNext("product not in cart please add it first found!", 404);
     }
     return res.json({ done: true, payload: "deleted!" });
 });

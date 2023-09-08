@@ -57,9 +57,10 @@ export const order_schema = new Schema(
 order_schema.virtual("final_price").get(function () {
     if (this.coupon) {
         const p = Number(this["order-total-price"]) || 1;
-        const d = Number(this.coupon.discount) || 0;
+        const d = Number(this?.coupon?.discount) || 0;
         return (p - (p - d) / 100).toFixed(2);
     }
+    return this?.["order-total-price"];
 });
 const order_model = model("orders", order_schema);
 export default order_model;

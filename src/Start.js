@@ -18,31 +18,31 @@ import NextError from "./utils/NextError.js";
 const allowed_domains = ["http://127.0.0.1:5500"];
 const Start = async (app, express) => {
     try {
-        app.use(
-            /**
-             * @param {import('express').Request} req
-             * @param {import('express').Response} res
-             * @param {import('express').NextFunction} next
-             */ (req, res, next) => {
-                console.log("origin", req?.headers?.origin);
-                if (req.originalUrl.includes("/users/confirm-email")) {
-                    res.setHeader("Access-Control-Allow-Origin", "*");
-                    res.setHeader("Access-Control-Allow-Methods", "GET");
-                    return next();
-                }
-                if (!allowed_domains.includes(req?.headers?.origin)) {
-                    return NextError(next).CallNext("Blocked By Cors", 401);
-                }
-                res.setHeader("Access-Control-Allow-Headers", "*");
-                res.setHeader(
-                    "Access-Control-Allow-Methods",
-                    "GET PATCH DELETE POST"
-                );
-                res.setHeader("Access-Control-Allow-Private-Network", true);
-                return next();
-            }
-        );
-        // app.use(cors());
+        // app.use(
+        //     /**
+        //      * @param {import('express').Request} req
+        //      * @param {import('express').Response} res
+        //      * @param {import('express').NextFunction} next
+        //      */ (req, res, next) => {
+        //         console.log("origin", req?.headers?.origin);
+        //         if (req.originalUrl.includes("/users/confirm-email")) {
+        //             res.setHeader("Access-Control-Allow-Origin", "*");
+        //             res.setHeader("Access-Control-Allow-Methods", "GET");
+        //             return next();
+        //         }
+        //         if (!allowed_domains.includes(req?.headers?.origin)) {
+        //             return NextError(next).CallNext("Blocked By Cors", 401);
+        //         }
+        //         res.setHeader("Access-Control-Allow-Headers", "*");
+        //         res.setHeader(
+        //             "Access-Control-Allow-Methods",
+        //             "GET PATCH DELETE POST"
+        //         );
+        //         res.setHeader("Access-Control-Allow-Private-Network", true);
+        //         return next();
+        //     }
+        // );
+        app.use(cors());
         app.use(express.json());
         await Connect();
         app.use("/users", users_router);

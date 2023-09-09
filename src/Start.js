@@ -13,40 +13,38 @@ import NextError from "./utils/NextError.js";
 const allowed_domains = ["http://127.0.0.1:5500"];
 /**
  *
- * @param {import('express').Express} app
+ * @param {import('express-serve-static-core').Express} app
  * @param {import("./types").Express} express
  */
 const Start = async (app, express) => {
     try {
         if (process.env?.testing !== "yes") {
-            app.use(
-                /**
-                 * @param {import('express').Request} req
-                 * @param {import('express').Response} res
-                 * @param {import('express').NextFunction} next
-                 */ (req, res, next) => {
-                    if (req.originalUrl.includes("/users/confirm-email")) {
-                        res.setHeader("Access-Control-Allow-Origin", "*");
-                        res.setHeader("Access-Control-Allow-Methods", "GET");
-                        return next();
-                    }
-                    if (!allowed_domains.includes(req?.headers?.origin)) {
-                        return NextError(next).CallNext("Blocked By Cors", 401);
-                    }
-                    res.setHeader("Access-Control-Allow-Headers", "*");
-                    res.setHeader(
-                        "Access-Control-Allow-Methods",
-                        "GET PATCH DELETE POST"
-                    );
-                    res.setHeader("Access-Control-Allow-Private-Network", true);
+            app.use((req, res, next) => {
+                if (req.originalUrl.includes("/users/confirm-email")) {
+                    res.setHeader("Access-Control-Allow-Origin", "*");
+                    res.setHeader("Access-Control-Allow-Methods", "GET");
                     return next();
                 }
-            );
+                if (!allowed_domains.includes(req?.headers?.origin)) {
+                    return NextError(next).CallNext("Blocked By Cors", 401);
+                }
+                res.setHeader("Access-Control-Allow-Headers", "*");
+                res.setHeader(
+                    "Access-Control-Allow-Methods",
+                    "GET PATCH DELETE POST"
+                );
+                res.setHeader("Access-Control-Allow-Private-Network", true);
+                return next();
+            });
         } else {
             app.use(cors());
         }
-        app.use(express.json());
-        express;
+        app.use((q, _, n) => {
+            if (q.originalUrl.includes("/order/webhook")) {
+                return n();
+            }
+            express.json()(q, _, n);
+        });
         await Connect();
         app.get("/", (_, res) => res.json("Welcome to my project"));
         app.use("/users", users_router);

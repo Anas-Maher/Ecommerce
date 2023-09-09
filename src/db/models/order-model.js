@@ -5,6 +5,8 @@ import { Schema, Types, model } from "mongoose";
 export const shipping_status = [
     "placed",
     "shipping",
+    "paid",
+    "failed",
     "delivered",
     "canceled",
     "refund",

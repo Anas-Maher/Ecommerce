@@ -15,6 +15,7 @@ export const rounds = +process.env?.rounds || 10;
 export const Expiration_Time = 172800;
 export const folder_name = process.env?.folder_name;
 export const stripe_key = process.env?.stripe_key;
+export const webhook = process.env?.webhook;
 export const dirname = path.dirname(fileURLToPath(import.meta.url));
 export const valid_uploads = Object.freeze({
     images: Object.freeze(["image/png", "image/jpeg"]),

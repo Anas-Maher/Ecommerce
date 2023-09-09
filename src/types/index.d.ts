@@ -7,88 +7,88 @@ import { users_schema } from "../db/models/users-models.js";
 import { category_schema } from "../db/models/category-model.js";
 import { order_schema } from "../db/models/order-model.js";
 import { products_schema } from "../db/models/product-model.js";
-global {
-    export declare namespace Express {
-        var json: typeof bodyParser.json;
-        var raw: typeof bodyParser.raw;
-        var text: typeof bodyParser.text;
-        var application: Application;
-        var request: Request;
-        var response: Response;
-        var static: serveStatic.RequestHandlerConstructor<Response>;
-        var urlencoded: typeof bodyParser.urlencoded;
-        export function query(
-            options: qs.IParseOptions | typeof qs.parse
-        ): Handler;
-        export function Router(options?: RouterOptions): core.Router;
-        interface RouterOptions {
-            /**
-             * Enable case sensitivity.
-             */
-            caseSensitive?: boolean | undefined;
+export declare namespace Express {
+    var json: typeof bodyParser.json;
+    var raw: typeof bodyParser.raw;
+    var text: typeof bodyParser.text;
+    var application: Application;
+    var request: Request;
+    var response: Response;
+    var static: serveStatic.RequestHandlerConstructor<Response>;
+    var urlencoded: typeof bodyParser.urlencoded;
+    export function query(
+        options: qs.IParseOptions | typeof qs.parse
+    ): Handler;
+    export function Router(options?: RouterOptions): core.Router;
+    interface RouterOptions {
+        /**
+         * Enable case sensitivity.
+         */
+        caseSensitive?: boolean | undefined;
 
-            /**
-             * Preserve the req.params values from the parent router.
-             * If the parent and the child have conflicting param names, the child’s value take precedence.
-             *
-             * @default false
-             * @since 4.5.0
-             */
-            mergeParams?: boolean | undefined;
+        /**
+         * Preserve the req.params values from the parent router.
+         * If the parent and the child have conflicting param names, the child’s value take precedence.
+         *
+         * @default false
+         * @since 4.5.0
+         */
+        mergeParams?: boolean | undefined;
 
-            /**
-             * Enable strict routing.
-             */
-            strict?: boolean | undefined;
-        }
-
-        interface Application extends core.Application {}
-        interface CookieOptions extends core.CookieOptions {}
-        interface Errback extends core.Errback {}
-        interface ErrorRequestHandler<
-            P = core.ParamsDictionary,
-            ResBody = any,
-            ReqBody = any,
-            ReqQuery = core.Query,
-            Locals extends Record<string, any> = Record<string, any>
-        > extends core.ErrorRequestHandler<
-                P,
-                ResBody,
-                ReqBody,
-                ReqQuery,
-                Locals
-            > {}
-        interface Express extends core.Express {}
-        interface Handler extends core.Handler {}
-        interface IRoute extends core.IRoute {}
-        interface IRouter extends core.IRouter {}
-        interface IRouterHandler<T> extends core.IRouterHandler<T> {}
-        interface IRouterMatcher<T> extends core.IRouterMatcher<T> {}
-        interface MediaType extends core.MediaType {}
-        interface NextFunction extends core.NextFunction {}
-        interface Locals extends core.Locals {}
-        interface Request<
-            P = core.ParamsDictionary,
-            ResBody = any,
-            ReqBody = any,
-            ReqQuery = core.Query,
-            Locals extends Record<string, any> = Record<string, any>
-        > extends core.Request<P, ResBody, ReqBody, ReqQuery, Locals> {}
-        interface RequestHandler<
-            P = core.ParamsDictionary,
-            ResBody = any,
-            ReqBody = any,
-            ReqQuery = core.Query,
-            Locals extends Record<string, any> = Record<string, any>
-        > extends core.RequestHandler<P, ResBody, ReqBody, ReqQuery, Locals> {}
-        interface RequestParamHandler extends core.RequestParamHandler {}
-        interface Response<
-            ResBody = any,
-            Locals extends Record<string, any> = Record<string, any>
-        > extends core.Response<ResBody, Locals> {}
-        interface Router extends core.Router {}
-        interface Send extends core.Send {}
+        /**
+         * Enable strict routing.
+         */
+        strict?: boolean | undefined;
     }
+
+    interface Application extends core.Application {}
+    interface CookieOptions extends core.CookieOptions {}
+    interface Errback extends core.Errback {}
+    interface ErrorRequestHandler<
+        P = core.ParamsDictionary,
+        ResBody = any,
+        ReqBody = any,
+        ReqQuery = core.Query,
+        Locals extends Record<string, any> = Record<string, any>
+    > extends core.ErrorRequestHandler<
+            P,
+            ResBody,
+            ReqBody,
+            ReqQuery,
+            Locals
+        > {}
+    interface Express extends core.Express {}
+    interface Handler extends core.Handler {}
+    interface IRoute extends core.IRoute {}
+    interface IRouter extends core.IRouter {}
+    interface IRouterHandler<T> extends core.IRouterHandler<T> {}
+    interface IRouterMatcher<T> extends core.IRouterMatcher<T> {}
+    interface MediaType extends core.MediaType {}
+    interface NextFunction extends core.NextFunction {}
+    interface Locals extends core.Locals {}
+    interface Request<
+        P = core.ParamsDictionary,
+        ResBody = any,
+        ReqBody = any,
+        ReqQuery = core.Query,
+        Locals extends Record<string, any> = Record<string, any>
+    > extends core.Request<P, ResBody, ReqBody, ReqQuery, Locals> {}
+    interface RequestHandler<
+        P = core.ParamsDictionary,
+        ResBody = any,
+        ReqBody = any,
+        ReqQuery = core.Query,
+        Locals extends Record<string, any> = Record<string, any>
+    > extends core.RequestHandler<P, ResBody, ReqBody, ReqQuery, Locals> {}
+    interface RequestParamHandler extends core.RequestParamHandler {}
+    interface Response<
+        ResBody = any,
+        Locals extends Record<string, any> = Record<string, any>
+    > extends core.Response<ResBody, Locals> {}
+    interface Router extends core.Router {}
+    interface Send extends core.Send {}
+}
+global {
     export declare interface File {
         /** Name of the form field associated with this file. */
         fieldname: string;
@@ -171,8 +171,12 @@ export type DeepReadonly<T> = {
 export type Shipping =
     | "placed"
     | "shipping"
+    | "paid"
+    | "failed"
     | "delivered"
     | "canceled"
     | "refund";
 export type Payment = "card" | "cash";
-export type Pros = Array<typeof products_schema & InferSchemaType<typeof products_schema>>;
+export type Pros = Array<
+    typeof products_schema & InferSchemaType<typeof products_schema>
+>;

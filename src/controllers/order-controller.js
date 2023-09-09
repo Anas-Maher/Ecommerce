@@ -104,7 +104,6 @@ export const create_order = AsyncErrorHandler(async (req, res, next) => {
             "sorry we could not send an email but your order has been place please call the support or cancel the order"
         );
     }
-    await update_stock(order?.products);
     if (payment === "card") {
         const stripe = new Stripe(stripe_key);
         if (order?.coupon?.name != undefined) {
@@ -116,6 +115,11 @@ export const create_order = AsyncErrorHandler(async (req, res, next) => {
         const stripe_session = await stripe.checkout.sessions.create({
             payment_method_types: ["card"],
             mode: "payment",
+            metadata: {
+                order_id: order._id.toString(),
+                products: order?.products,
+                uuid: req?.user?._id,
+            },
             // todo add website
             success_url: "https://google.com",
             cancel_url: "https://google.com",
@@ -135,7 +139,6 @@ export const create_order = AsyncErrorHandler(async (req, res, next) => {
         });
         return res.json({ done: true, payload: stripe_session.url });
     }
-    await clear_cart(req?.user?._id);
     return res.json({ done: true, payload: "check your inbox please" });
 });
 
@@ -155,4 +158,33 @@ export const cancel_order = AsyncErrorHandler(async ({ params }, res, next) => {
     await order.updateOne({ $set: { status: "canceled" } }, { new: true });
     await update_stock(order.products, false);
     return res.json({ done: true, payload: "canceled successfully" });
+});
+
+export const webhook = AsyncErrorHandler(async (req, res, next) => {
+    const sig = req.headers["stripe-signature"];
+    const stripe = new Stripe(stripe_key);
+    try {
+        var event = stripe.webhooks.constructEvent(
+            req.body,
+            sig,
+            webhook_secret
+        );
+    } catch (err) {
+        return res.status(400).json(`Webhook Error: ${err?.message}`);
+    }
+    const { order_id, products, uuid } = event.data.object.metadata;
+    //todo if it does not work return it up
+    if (event.type === "checkout.session.completed") {
+        await Promise.allSettled([
+            await order_model.findOneAndUpdate(
+                { _id: order_id },
+                { status: "payed" }
+            ),
+            await update_stock(products),
+            await clear_cart(uuid),
+        ]);
+        return;
+    }
+    await order_model.findOneAndUpdate({ _id: order_id }, { status: "failed" });
+    return;
 });

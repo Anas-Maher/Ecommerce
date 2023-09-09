@@ -18,7 +18,7 @@ const allowed_domains = ["http://127.0.0.1:5500"];
  */
 const Start = async (app, express) => {
     try {
-        if (process.env?.testing !== "true") {
+        if (process.env?.testing !== "yes") {
             app.use(
                 /**
                  * @param {import('express').Request} req

@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "nodemon .",
     "start": "node ./index.js",
-    "publish": "git add --all && git commit -m \"For TEst Inly\" && git push"
+    "publish": "git add --all && git commit -m \"Testing\" && git push"
   },
   "author": "Anas Maher",
   "license": "ISC",

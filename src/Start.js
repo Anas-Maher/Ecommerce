@@ -45,7 +45,7 @@ const Start = async (app, express) => {
         app.use(cors());
         app.use(express.json());
         await Connect();
-        app.get("/", (_, r) => r.sendFile('../favicon.ico'));
+        app.get("/", (_, r) => r.sendFile("/favicon.ico"));
         app.use("/users", users_router);
         app.use("/category", categories_router);
         app.use("/subcategory", subcategory_router);

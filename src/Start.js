@@ -25,7 +25,6 @@ const Start = async (app, express) => {
                  * @param {import('express').Response} res
                  * @param {import('express').NextFunction} next
                  */ (req, res, next) => {
-                    console.log("origin", req?.headers?.origin);
                     if (req.originalUrl.includes("/users/confirm-email")) {
                         res.setHeader("Access-Control-Allow-Origin", "*");
                         res.setHeader("Access-Control-Allow-Methods", "GET");
@@ -58,10 +57,12 @@ const Start = async (app, express) => {
         app.use("/coupons", coupons_router);
         app.use("/cart", cart_router);
         app.use("/order", order_router);
-        app.use("*", (_, s) => s.json("Welcome To my website,looks like you visited the wrong route!"));
+        app.use("*", (_, s) =>
+            s.json(
+                "Welcome To my website , looks like you visited the wrong route!"
+            )
+        );
         app.use(GlobalErrorHandler);
-    } catch (error) {
-        console.error(error);
-    }
+    } catch (error) {}
 };
 export default Start;

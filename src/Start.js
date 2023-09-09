@@ -49,7 +49,7 @@ const Start = async (app, express) => {
         app.use(express.json());
         express;
         await Connect();
-        app.get("/", (_, res) => r.json("Welcome to my project"));
+        app.get("/", (_, res) => res.json("Welcome to my project"));
         app.use("/users", users_router);
         app.use("/category", categories_router);
         app.use("/subcategory", subcategory_router);

@@ -4,7 +4,6 @@ import Start from "./src/Start.js";
 import { port } from "./src/utils/Envs.js";
 const app = express();
 await Start(app, express);
-express.static("./src/img");
 app.listen(
     port
     //      () => {

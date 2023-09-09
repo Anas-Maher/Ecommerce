@@ -44,9 +44,9 @@ const Start = async (app, express) => {
         // );
         app.use(cors());
         app.use(express.json());
-        express
+        express;
         await Connect();
-        app.get("/", (_, r) => r.sendFile("/img/favicon.ico"));
+        app.get("/", (_, r) => r.sendFile("/src/img"));
         app.use("/users", users_router);
         app.use("/category", categories_router);
         app.use("/subcategory", subcategory_router);
@@ -55,6 +55,7 @@ const Start = async (app, express) => {
         app.use("/coupons", coupons_router);
         app.use("/cart", cart_router);
         app.use("/order", order_router);
+        app.use(express.static("/src/img"));
         app.use("*", (_, s) => s.json("Check Url And Method please "));
         app.use(GlobalErrorHandler);
     } catch (error) {

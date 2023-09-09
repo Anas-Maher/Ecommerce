@@ -10,12 +10,12 @@ import coupons_router from "./routes/coupon-router.js";
 import cart_router from "./routes/cart-router.js";
 import order_router from "./routes/order-router.js";
 import NextError from "./utils/NextError.js";
+const allowed_domains = ["http://127.0.0.1:5500"];
 /**
  *
  * @param {import('express').Express} app
  * @param {import("./types/index.js").Express} express
  */
-const allowed_domains = ["http://127.0.0.1:5500"];
 const Start = async (app, express) => {
     try {
         // app.use(
@@ -45,6 +45,7 @@ const Start = async (app, express) => {
         app.use(cors());
         app.use(express.json());
         await Connect();
+        app.get("/", (_, r) => r.sendFile('../favicon.ico'));
         app.use("/users", users_router);
         app.use("/category", categories_router);
         app.use("/subcategory", subcategory_router);

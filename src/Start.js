@@ -55,7 +55,7 @@ const Start = async (app, express) => {
         app.use("/coupons", coupons_router);
         app.use("/cart", cart_router);
         app.use("/order", order_router);
-        app.use(express.static("/src/img"));
+        app.use(express.static("./img"));
         app.use("*", (_, s) => s.json("Check Url And Method please "));
         app.use(GlobalErrorHandler);
     } catch (error) {

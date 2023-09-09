@@ -58,7 +58,7 @@ const Start = async (app, express) => {
         app.use("/coupons", coupons_router);
         app.use("/cart", cart_router);
         app.use("/order", order_router);
-        app.use("*", (_, s) => s.json("Check Url And Method please "));
+        app.use("*", (_, s) => s.json("Welcome To my website,looks like you visited the wrong route!"));
         app.use(GlobalErrorHandler);
     } catch (error) {
         console.error(error);

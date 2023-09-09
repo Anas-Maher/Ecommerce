@@ -44,6 +44,7 @@ const Start = async (app, express) => {
         // );
         app.use(cors());
         app.use(express.json());
+        express
         await Connect();
         app.get("/", (_, r) => r.sendFile("/img/favicon.ico"));
         app.use("/users", users_router);

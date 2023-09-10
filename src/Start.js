@@ -10,6 +10,8 @@ import coupons_router from "./routes/coupon-router.js";
 import cart_router from "./routes/cart-router.js";
 import order_router from "./routes/order-router.js";
 import NextError from "./utils/NextError.js";
+import reviews_router from "./routes/reviews-router.js";
+import "dotenv/config";
 const allowed_domains = ["http://127.0.0.1:5500"];
 /**
  *
@@ -37,8 +39,8 @@ const Start = async (app, express) => {
                 return next();
             });
         } else {
-            app.use(cors());
         }
+        app.use(cors());
         app.use((q, _, n) => {
             if (q.originalUrl.includes("/order/webhook")) {
                 return n();
@@ -53,6 +55,7 @@ const Start = async (app, express) => {
         app.use("/brands", brands_router);
         app.use("/products", products_router);
         app.use("/coupons", coupons_router);
+        app.use("/reviews", reviews_router);
         app.use("/cart", cart_router);
         app.use("/order", order_router);
         app.use("*", (_, s) =>

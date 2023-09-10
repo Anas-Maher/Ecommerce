@@ -1,4 +1,5 @@
 import { Schema, Types, model } from "mongoose";
+import products_model from "./product-model.js";
 
 export const brand_schema = new Schema(
     {
@@ -43,5 +44,10 @@ export const brand_schema = new Schema(
 );
 
 const brand_model = model("brand", brand_schema);
-
+brand_schema.post("deleteOne", async function () {
+    const pros = await products_model.find({ subcategory: this["id"] });
+    pros.forEach(async (v) => {
+        await v.deleteOne();
+    });
+});
 export default brand_model;

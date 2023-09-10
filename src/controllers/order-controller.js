@@ -87,7 +87,7 @@ export const create_order = AsyncErrorHandler(async (req, res, next) => {
     });
     unlink(pdf_path, (err) => {
         if (err) {
-            return CallNext("INternal Server Error");
+            return CallNext("Internal Server Error");
         }
     });
     await order.updateOne(
@@ -122,7 +122,7 @@ export const create_order = AsyncErrorHandler(async (req, res, next) => {
             },
             // todo add website
             success_url: "https://google.com",
-            cancel_url: "https://google.com",
+            cancel_url: "https://facebook.com",
             line_items: order_products.map((product) => {
                 return {
                     price_data: {

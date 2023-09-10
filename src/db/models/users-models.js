@@ -1,6 +1,7 @@
 import { Schema, model } from "mongoose";
 import { rounds } from "../../utils/Envs.js";
 import bcryptjs from "bcryptjs";
+import order_model from "./order-model.js";
 export const users_schema = new Schema(
     {
         "user-name": {
@@ -78,8 +79,10 @@ export const users_schema = new Schema(
         },
     }
 );
-users_schema.pre("save", function () {
-    this.password = bcryptjs.hashSync(this.password, rounds);
+users_schema.pre("save", { document: true, query: false }, function () {
+    if (this && this?.isModified("password")) {
+        this.password = bcryptjs.hashSync(this.password, rounds);
+    }
 });
 
 const users_model = model("users", users_schema);

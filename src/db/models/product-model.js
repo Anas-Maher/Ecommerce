@@ -1,4 +1,5 @@
 import { Schema, Types, model } from "mongoose";
+import brand_model from "./brand-model.js";
 export const products_schema = new Schema(
     {
         name: { type: String, required: true },
@@ -88,5 +89,6 @@ products_schema.query.custom_select = function (fields) {
     const matched_keys = query_keys?.filter((v) => model_keys.includes(v));
     return this?.select(matched_keys);
 };
+
 const products_model = model("product", products_schema);
 export default products_model;

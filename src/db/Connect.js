@@ -5,6 +5,7 @@ const Connect = async () => {
         const db = await mongoose?.connect(db_url, {
             connectTimeoutMS: 30_000,
         });
+        console.log("db running");
         return db;
     } catch (error) {}
 };
